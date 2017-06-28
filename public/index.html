@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>SB Admin 2 - Bootstrap Admin Theme</title>
+
+  <!-- Bootstrap Core CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link href="css/dashboard.css" rel="stylesheet">
+
+  <!-- Custom Fonts -->
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+  <div class="container" id="wrapper">
+    <div id="page-wrapper">
+      <div class="row">
+        <div class="col-lg-12">
+          <h1 class="page-header">LocalCart Dashboard</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+      </div>
+      <!-- /.row -->
+      <div class="row">
+        <div class="col-lg-3 col-md-6">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <div class="row">
+                <div class="col-xs-3">
+                  <i class="fa fa-users fa-5x"></i>
+                </div>
+                <div class="col-xs-9 text-right">
+                  <div class="huge">{{ latestReport.funnel.users }}</div>
+                  <div>Users</div>
+                </div>
+              </div>
+            </div>
+            <a href="#">
+              <div class="panel-footer">
+                <span class="pull-left">View Details</span>
+                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                <div class="clearfix"></div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="panel panel-yellow">
+            <div class="panel-heading">
+              <div class="row">
+                <div class="col-xs-3">
+                  <i class="fa fa-shopping-basket fa-5x"></i>
+                </div>
+                <div class="col-xs-9 text-right">
+                  <div class="huge">$ {{ latestReport.lastHour.sumItems }}</div>
+                  <div>baskets</div>
+                </div>
+              </div>
+            </div>
+            <a href="#">
+              <div class="panel-footer">
+                <span class="pull-left">View Details</span>
+                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                <div class="clearfix"></div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="panel panel-green">
+            <div class="panel-heading">
+              <div class="row">
+                <div class="col-xs-3">
+                  <i class="fa fa-usd fa-5x"></i>
+                </div>
+                <div class="col-xs-9 text-right">
+                  <div class="huge">$ {{ latestReport.lastHour.sumOrders }}</div>
+                  <div>Orders</div>
+                </div>
+              </div>
+            </div>
+            <a href="#">
+              <div class="panel-footer">
+                <span class="pull-left">View Details</span>
+                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                <div class="clearfix"></div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="panel panel-red">
+            <div class="panel-heading">
+              <div class="row">
+                <div class="col-xs-3">
+                  <i class="fa fa-thermometer-half fa-5x"></i>
+                </div>
+                <div class="col-xs-9 text-right">
+                  <div class="huge">{{ latest.temperature }}</div>
+                  <div>°C</div>
+                </div>
+              </div>
+            </div>
+            <a href="#">
+              <div class="panel-footer">
+                <span class="pull-left">View Details</span>
+                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                <div class="clearfix"></div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- /.row -->
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <i class="fa fa-line-chart fa-fw"></i> Trend
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+               <canvas id="trend" width="780" height="495"></canvas>
+            </div>
+            <!-- /.panel-body -->
+          </div>
+          
+        </div>
+        <!-- /.col-lg-8 -->
+        <div class="col-lg-4">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <i class="fa fa-filter fa-fw"></i> Funnel (last hour)
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+              <div id="funnel"></div>
+            </div>
+            <!-- /.panel-body -->
+          </div>
+          
+          <!-- /.panel .chat-panel -->
+        </div>
+        <!-- /.col-lg-4 -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /#page-wrapper -->
+
+  </div>
+  <!-- /#wrapper -->
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://unpkg.com/vue"></script>
+
+  <!-- Bootstrap Core JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <!-- D3 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.9.1/d3.min.js"></script>
+  <script src="js/d3-funnel.min.js"></script>
+
+  <script src="js/smoothie.js"></script>
+
+  <!-- socket.io -->
+  <script src="/socket.io/socket.io.js"></script>
+
+  <!-- our code!!!! -->
+  <script src="js/dashboard.js"></script>
+
+<script>
+
+</script>
+
+</body>
+
+</html>
