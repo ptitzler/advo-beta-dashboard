@@ -65,4 +65,5 @@ server.listen(appEnv.port, '0.0.0.0', function () {
   console.log('URL', appEnv.url);
 })
 
-
+// deployment tracker
+require('cf-deployment-tracker-client').track();
