@@ -61,8 +61,7 @@ var cfenv = require('cfenv'),
 
 // listen
 server.listen(appEnv.port, '0.0.0.0', function () {
-  console.log('Example app listening on port', appEnv.port);
-  console.log('URL', appEnv.url);
+  console.log('Dashboard app listening on port', appEnv.port);
 })
 
 // deployment tracker
