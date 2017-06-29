@@ -1,6 +1,7 @@
 console.log("hello");
 
 var line1 = null;
+var line2 = null;
 
 var app = new Vue({
   el: '#wrapper',
@@ -20,10 +21,14 @@ var app = new Vue({
   },
   mounted: function() {
     // on startup
-    var smoothie = new SmoothieChart({maxValue:10000,minValue:0, millisPerPixel:1000});
-    smoothie.streamTo(document.getElementById("trend"));
+    var smoothie = new SmoothieChart({maxValue:50000,minValue:0, millisPerPixel:1000});
+    smoothie.streamTo(document.getElementById("trend1"));
     line1 = new TimeSeries({lineWidth:2.7});
-    smoothie.addTimeSeries(line1);
+    smoothie.addTimeSeries(line1, { strokeStyle:'rgb(92, 184, 92)', lineWidth:3 });
+    var smoothie2 = new SmoothieChart({maxValue:100,minValue:0, millisPerPixel:1000});
+    smoothie2.streamTo(document.getElementById("trend2"));
+    line2 = new TimeSeries({lineWidth:2.7});
+    smoothie2.addTimeSeries(line2, { strokeStyle:'rgb(217, 83, 79)', lineWidth:3 });
   },
   methods: {
     report: function(data) {
@@ -34,6 +39,7 @@ var app = new Vue({
       }
       funnelChart();
       line1.append(new Date().getTime(), app.latestReport.lastHour.sumOrders);
+      line2.append(new Date().getTime(), app.conversion);
     }
   }
 });
