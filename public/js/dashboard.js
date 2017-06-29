@@ -21,7 +21,7 @@ var app = new Vue({
   },
   mounted: function() {
     // on startup
-    var smoothie = new SmoothieChart({maxValue:50000,minValue:0, millisPerPixel:1000});
+    var smoothie = new SmoothieChart({maxValue:100000,minValue:0, millisPerPixel:1000});
     smoothie.streamTo(document.getElementById("trend1"));
     line1 = new TimeSeries({lineWidth:2.7});
     smoothie.addTimeSeries(line1, { strokeStyle:'rgb(92, 184, 92)', lineWidth:3 });

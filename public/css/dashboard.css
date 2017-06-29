@@ -436,3 +436,7 @@ table.dataTable thead .sorting:after {
   width: 350px; 
   height:500px
 }
+
+[v-cloak] {
+  display: none;
+}
