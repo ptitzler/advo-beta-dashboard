@@ -5,16 +5,13 @@ var line1 = null;
 var app = new Vue({
   el: '#wrapper',
   data: {
-    latest: {
-      numReadings: 0,
-      temperature: 0
-    },
     latestReport: {
       funnel: {
         users: 0,
         baskets: 0,
         orders:0
       },
+      conversion: 0,
       lastHour: {
         sumItems:0,
         sumOrders: 0
@@ -29,17 +26,14 @@ var app = new Vue({
     smoothie.addTimeSeries(line1);
   },
   methods: {
-    news: function(data) {
-      console.log('news', data);
-      app.latest = data;
-      //line1.append(data.ts, data.temperature);
-    },
     report: function(data) {
       console.log('report', data);
       app.latestReport = data;
+      if ( app.latestReport.funnel.baskets > 0) {
+        app.conversion = Math.round(100 * app.latestReport.funnel.orders / app.latestReport.funnel.baskets)
+      }
       funnelChart();
       line1.append(new Date().getTime(), app.latestReport.lastHour.sumOrders);
-
     }
   }
 });
@@ -68,9 +62,6 @@ var funnelChart = function() {
 };
 
 var socket = io.connect(window.location.origin);
-socket.on('news', function (data) {
-  app.news(data);
-});
 socket.on('report', function (data) {
   app.report(data);
 });
