@@ -1,3 +1,8 @@
+---
+declared-services:
+  redis-service:
+    label: compose-for-redis
+    plan: Standard
 applications:
 - name: dashboard
   path: .
@@ -8,3 +13,5 @@ applications:
   domain: mybluemix.net
   random-route: true
   command: node index.js
+  services:
+  - redis-service

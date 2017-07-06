@@ -4,7 +4,19 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var redis = require('redis');
 var async = require('async');
+
+// get cloudfoundry config
+var cfenv = require('cfenv'),
+  appEnv = cfenv.getAppEnv();
+
+console.log(JSON.stringify(appEnv));
+
 var redis_url = process.env.REDIS_URL || 'redis://localhost:6379';
+var redisSvc = appEnv.getService('redis-service');
+if((redisSvc) && (redisSvc.hasOwnProperty('credentials')) && redisSvc.credentials.hasOwnProperty('uri')) {
+  redis_url = redisSvc.credentials.uri;
+} 
+
 var redisClient = redis.createClient(redis_url);
 
 // template report
@@ -29,11 +41,13 @@ var generateLatestReport  = function(callback) {
   ], function(err, results) {
     if (!err) {
       var funnel = results[0];
-      latestReport.funnel.users = parseInt(funnel.login_count);
-      latestReport.funnel.baskets = parseInt(funnel.basket_count);
-      latestReport.funnel.orders = parseInt(funnel.checkout_count);
-      latestReport.lastHour.sumItems = parseInt(funnel.basket_total);
-      latestReport.lastHour.sumOrders = parseInt(funnel.checkout_total);
+      if(funnel) {
+        latestReport.funnel.users = parseInt(funnel.login_count);
+        latestReport.funnel.baskets = parseInt(funnel.basket_count);
+        latestReport.funnel.orders = parseInt(funnel.checkout_count);
+        latestReport.lastHour.sumItems = parseInt(funnel.basket_total);
+        latestReport.lastHour.sumOrders = parseInt(funnel.checkout_total);
+      }
     }
     callback(null, latestReport);
   });
@@ -54,10 +68,6 @@ setInterval(function() {
   });
 }, 1000);
 
-
-// get cloudfoundry config
-var cfenv = require('cfenv'),
-  appEnv = cfenv.getAppEnv();
 
 // listen
 server.listen(appEnv.port, '0.0.0.0', function () {
