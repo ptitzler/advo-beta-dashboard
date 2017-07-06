@@ -41,11 +41,13 @@ var generateLatestReport  = function(callback) {
   ], function(err, results) {
     if (!err) {
       var funnel = results[0];
-      latestReport.funnel.users = parseInt(funnel.login_count);
-      latestReport.funnel.baskets = parseInt(funnel.basket_count);
-      latestReport.funnel.orders = parseInt(funnel.checkout_count);
-      latestReport.lastHour.sumItems = parseInt(funnel.basket_total);
-      latestReport.lastHour.sumOrders = parseInt(funnel.checkout_total);
+      if(funnel) {
+        latestReport.funnel.users = parseInt(funnel.login_count);
+        latestReport.funnel.baskets = parseInt(funnel.basket_count);
+        latestReport.funnel.orders = parseInt(funnel.checkout_count);
+        latestReport.lastHour.sumItems = parseInt(funnel.basket_total);
+        latestReport.lastHour.sumOrders = parseInt(funnel.checkout_total);
+      }
     }
     callback(null, latestReport);
   });
