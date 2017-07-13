@@ -5,17 +5,47 @@ var io = require('socket.io')(server);
 var redis = require('redis');
 var async = require('async');
 
+/*
+ * This application requires a Redis service. You must
+ *  - define environment variable REDIS_URL or
+ *  - bind a Redis service instance named "redis-service" (in Bluemix) or
+ *  - run Redis locally (alongside this application)
+ */
+
+
 // get cloudfoundry config
 var cfenv = require('cfenv'),
   appEnv = cfenv.getAppEnv();
 
 console.log(JSON.stringify(appEnv));
 
-var redis_url = process.env.REDIS_URL || 'redis://localhost:6379';
-var redisSvc = appEnv.getService('redis-service');
-if((redisSvc) && (redisSvc.hasOwnProperty('credentials')) && redisSvc.credentials.hasOwnProperty('uri')) {
-  redis_url = redisSvc.credentials.uri;
-} 
+var redis_url = process.env.REDIS_URL;
+if (!redis_url) {
+  // Custom REDIS_URL is not defined. If a Redis service instance is bound to this app use it.
+  if((appEnv.hasOwnProperty('services')) && (appEnv.services.hasOwnProperty('compose-for-redis')) && (appEnv.services['compose-for-redis'].length > 0)) {
+    var redisSvc = appEnv.services['compose-for-redis'][0];
+    if((redisSvc.hasOwnProperty('credentials')) && redisSvc.credentials.hasOwnProperty('uri')) {
+      redis_url = redisSvc.credentials.uri;
+    } 
+  }
+}
+
+if (!redis_url) {
+  // Custom REDIS_URL is not defined and no Redis service was bound to the application. 
+  // Use the default if this application runs locally
+  if(appEnv.isLocal) {
+    redis_url = 'redis://localhost:6379';
+  }
+  else {
+    console.log('This application cannot start be started because it is not configured. You must');
+    console.log(' - define environment variable REDIS_URL (format: "redis://host:port") or');
+    console.log(' - bind a Redis service instance or');
+    console.log(' - run this application on the same machine where Redis is running (port 6379).');
+    process.exit(1);
+  }
+}
+
+console.log('Redis repository URL: ' + redis_url);
 
 var redisClient = redis.createClient(redis_url);
 
