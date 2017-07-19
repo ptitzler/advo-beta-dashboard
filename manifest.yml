@@ -1,6 +1,6 @@
 ---
 declared-services:
-  redis-service:
+  ComposeForRedis-WDPBeta:
     label: compose-for-redis
     plan: Standard
 applications:
@@ -14,4 +14,4 @@ applications:
   random-route: true
   command: node index.js
   services:
-  - redis-service
+  - ComposeForRedis-WDPBeta
