@@ -105,4 +105,4 @@ server.listen(appEnv.port, '0.0.0.0', function () {
 })
 
 // deployment tracker
-require('cf-deployment-tracker-client').track();
+require("metrics-tracker-client").track();
